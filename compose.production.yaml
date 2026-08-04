@@ -1,0 +1,140 @@
+services:
+  database:
+    image: postgis/postgis:17-3.5-alpine
+    container_name: roncegno-hub-db-prod
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${DB_DATABASE}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - database_data:/var/lib/postgresql/data
+      - ./infrastructure/postgres/init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_DATABASE}"]
+      interval: 10s
+      timeout: 5s
+      retries: 20
+    networks:
+      - internal
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "5"
+
+  cache:
+    image: redis:7.4-alpine
+    container_name: roncegno-hub-cache
+    restart: unless-stopped
+    command: ["redis-server", "--appendonly", "yes", "--requirepass", "${REDIS_PASSWORD}"]
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli -a '${REDIS_PASSWORD}' ping | grep PONG"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    volumes:
+      - redis_data:/data
+    networks:
+      - internal
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "5"
+
+  directus:
+    image: directus/directus:${DIRECTUS_VERSION:-11.14.0}
+    container_name: roncegno-content-hub-prod
+    restart: unless-stopped
+    depends_on:
+      database:
+        condition: service_healthy
+      cache:
+        condition: service_healthy
+    environment:
+      KEY: ${DIRECTUS_KEY}
+      SECRET: ${DIRECTUS_SECRET}
+      ADMIN_EMAIL: ${ADMIN_EMAIL}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD}
+      PUBLIC_URL: ${PUBLIC_URL}
+      DB_CLIENT: pg
+      DB_HOST: database
+      DB_PORT: 5432
+      DB_DATABASE: ${DB_DATABASE}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      WEBSOCKETS_ENABLED: "true"
+      CORS_ENABLED: "true"
+      CORS_ORIGIN: ${CORS_ORIGIN}
+      STORAGE_LOCATIONS: local
+      STORAGE_LOCAL_DRIVER: local
+      STORAGE_LOCAL_ROOT: /directus/uploads
+      CACHE_ENABLED: "true"
+      CACHE_AUTO_PURGE: "true"
+      CACHE_STORE: redis
+      REDIS: redis://:${REDIS_PASSWORD}@cache:6379
+      EXTENSIONS_AUTO_RELOAD: "false"
+      RATE_LIMITER_ENABLED: "true"
+      RATE_LIMITER_STORE: redis
+      RATE_LIMITER_POINTS: ${RATE_LIMITER_POINTS:-100}
+      RATE_LIMITER_DURATION: ${RATE_LIMITER_DURATION:-1}
+      LOG_LEVEL: ${LOG_LEVEL:-info}
+      TELEMETRY: "false"
+    volumes:
+      - directus_uploads:/directus/uploads
+      - ./directus/extensions:/directus/extensions:ro
+      - ./directus/snapshots:/directus/snapshots
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:8055/server/health >/dev/null || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 30
+    networks:
+      - internal
+      - proxy
+    logging:
+      driver: json-file
+      options:
+        max-size: "20m"
+        max-file: "5"
+
+  caddy:
+    image: caddy:2.10-alpine
+    container_name: roncegno-hub-proxy
+    restart: unless-stopped
+    depends_on:
+      directus:
+        condition: service_healthy
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    environment:
+      HUB_DOMAIN: ${HUB_DOMAIN}
+      ACME_EMAIL: ${ACME_EMAIL}
+    volumes:
+      - ./infrastructure/caddy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+      - caddy_logs:/var/log/caddy
+    networks:
+      - proxy
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "5"
+
+networks:
+  internal:
+    internal: true
+  proxy:
+
+volumes:
+  database_data:
+  redis_data:
+  directus_uploads:
+  caddy_data:
+  caddy_config:
+  caddy_logs:

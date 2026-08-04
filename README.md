@@ -1,57 +1,59 @@
-# Roncegno Content Hub 0.1
+# Roncegno Digital Platform 0.2
 
-Fondazione eseguibile per la gestione multicanale di eventi, luoghi, organizzazioni e contenuti per schermi.
+Content Hub multicanale basato su Directus, PostgreSQL/PostGIS e Redis.
 
-## Requisiti
+## Ambienti
 
-- Docker Engine
-- Docker Compose v2
-- almeno 2 GB di RAM disponibili
+- **Sviluppo locale:** `docker-compose.yml`
+- **Produzione/staging:** `docker-compose.yml` + `compose.production.yaml`
 
-## Avvio
+## Avvio locale
 
 ```bash
 cp .env.example .env
+docker compose up -d
 ```
 
-Modificare obbligatoriamente password, `DIRECTUS_KEY` e `DIRECTUS_SECRET`, quindi:
+Directus: `http://localhost:8055`
+
+## Avvio produzione
+
+```bash
+cp .env.production.example .env.production
+./scripts/generate-secrets.sh
+# compilare .env.production
+./scripts/production-up.sh
+./scripts/production-healthcheck.sh
+```
+
+## Componenti
+
+- Directus 11, con versione bloccabile
+- PostgreSQL 17 + PostGIS 3.5
+- Redis per cache e rate limiter
+- Caddy per HTTPS e reverse proxy
+- backup e restore di database/upload
+- deploy controllato con health check
+- workflow GitHub Actions di validazione
+
+## Script principali
 
 ```bash
 ./scripts/start.sh
+./scripts/production-up.sh
+./scripts/production-status.sh
+./scripts/production-healthcheck.sh
+./scripts/backup.sh
+./scripts/deploy.sh
 ```
 
-Aprire:
+## Documentazione
 
-```text
-http://localhost:8055
-```
-
-Accedere con `ADMIN_EMAIL` e `ADMIN_PASSWORD` definiti in `.env`.
-
-## Cosa viene creato
-
-- Directus 11
-- PostgreSQL 17 + PostGIS 3.5
-- tassonomie e termini iniziali
-- canali di distribuzione
-- organizzazione Comune di Roncegno Terme
-- tre luoghi demo
-- evento e occorrenza demo
-- schermo e playlist demo
-
-## Comandi
-
-```bash
-./scripts/healthcheck.sh
-./scripts/stop.sh
-./scripts/reset.sh
-./scripts/export-schema.sh
-```
-
-## Nota Directus
-
-Le tabelle applicative vengono create al primo avvio tramite gli script SQL in `infrastructure/postgres/init`. Directus le rileva dal database. Nel Data Studio vanno poi configurate le presentazioni dei campi, le relazioni ai file, le Policies e i Flow. Dopo questa configurazione, esportare lo snapshot versionato.
+- `docs/architecture.md`
+- `docs/content-model.md`
+- `docs/production.md`
+- `docs/runbook.md`
 
 ## Sicurezza
 
-Il file `.env` non deve essere committato. La configurazione inclusa è adatta allo sviluppo locale, non alla produzione.
+Non versionare `.env` o `.env.production`. Prima dell’esercizio reale configurare backup esterno, firewall, DNS, utenti nominali e test di ripristino.
