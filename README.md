@@ -1,6 +1,18 @@
-# Roncegno Digital Platform 0.2
+# Roncegno Digital Platform 0.3
 
 Content Hub multicanale basato su Directus, PostgreSQL/PostGIS e Redis.
+
+
+## Editorial Studio 0.3
+
+Dopo l’avvio della piattaforma esistente, applica la migrazione senza cancellare i dati:
+
+```bash
+./scripts/migrate.sh
+./scripts/verify-editorial-studio.sh
+```
+
+La release aggiunge workflow editoriale, revisioni, programmazione, sincronizzazione delle occorrenze e viste API per dashboard, calendario, eventi pubblici e “Roncegno oggi”. Consulta `docs/directus-editorial-studio.md`.
 
 ## Ambienti
 

@@ -1,0 +1,28 @@
+{
+  "version": "0.3.0",
+  "language": "it-IT",
+  "navigation": [
+    {"collection":"hub_editorial_dashboard","label":"Dashboard editoriale","icon":"dashboard"},
+    {"collection":"hub_calendar","label":"Calendario","icon":"calendar_month"},
+    {"collection":"events","label":"Eventi","icon":"event"},
+    {"collection":"event_occurrences","label":"Occorrenze","icon":"event_repeat"},
+    {"collection":"places","label":"Luoghi","icon":"place"},
+    {"collection":"organizations","label":"Organizzazioni","icon":"groups"},
+    {"collection":"editorial_reviews","label":"Revisioni","icon":"fact_check"},
+    {"collection":"distributions","label":"Distribuzione","icon":"send"},
+    {"collection":"channels","label":"Canali","icon":"hub"},
+    {"collection":"screens","label":"Schermi","icon":"monitor"},
+    {"collection":"playlists","label":"Playlist","icon":"playlist_play"},
+    {"collection":"taxonomies","label":"Tassonomie","icon":"category"},
+    {"collection":"taxonomy_terms","label":"Voci tassonomia","icon":"sell"}
+  ],
+  "status_colors": {
+    "draft":"#8A8A8A",
+    "review":"#D49A31",
+    "approved":"#4C7A67",
+    "scheduled":"#5479A8",
+    "published":"#2E7D32",
+    "cancelled":"#B5443C",
+    "archived":"#555555"
+  }
+}

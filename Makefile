@@ -20,3 +20,12 @@ prod-health:
 
 backup:
 	./scripts/backup.sh
+
+migrate:
+	./scripts/migrate.sh
+
+editorial-verify:
+	./scripts/verify-editorial-studio.sh
+
+publication-refresh:
+	./scripts/refresh-publication-statuses.sh
