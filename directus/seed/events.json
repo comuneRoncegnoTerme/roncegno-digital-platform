@@ -1,0 +1,113 @@
+[
+  {
+    "status": "published",
+    "title": "Festa della Castagna 2026",
+    "slug": "festa-della-castagna-2026",
+    "summary": "Il grande appuntamento autunnale di Roncegno Terme con mercatino della castagna, artigianato, prodotti locali, musica, attività per famiglie e sapori del territorio.",
+    "start_date": "2026-10-24T10:00:00+02:00",
+    "end_date": "2026-10-25T19:00:00+01:00",
+    "all_day": false,
+    "location_name": "Centro di Roncegno Terme",
+    "featured": true,
+    "source_url": "https://www.visitroncegno.it/it/"
+  },
+  {
+    "status": "published",
+    "title": "Aspettando la Festa della Castagna",
+    "slug": "aspettando-festa-della-castagna-2026",
+    "summary": "Serata di apertura con presentazione delle squadre GSD Calcio, punti ristoro, castagne, musica e DJ set.",
+    "start_date": "2026-10-23T18:00:00+02:00",
+    "end_date": "2026-10-23T23:30:00+02:00",
+    "all_day": false,
+    "location_name": "Piazzale dei pompieri e centro di Roncegno",
+    "featured": true
+  },
+  {
+    "status": "published",
+    "title": "Passeggiata sul Sentiero del Castagno – sabato",
+    "slug": "passeggiata-sentiero-castagno-24-ottobre-2026",
+    "summary": "Passeggiata accompagnata lungo il Sentiero del Castagno con accompagnatori forestali. Prenotazione tramite APT Valsugana.",
+    "start_date": "2026-10-24T09:00:00+02:00",
+    "end_date": "2026-10-24T12:00:00+02:00",
+    "all_day": false,
+    "location_name": "Sentiero del Castagno",
+    "featured": true
+  },
+  {
+    "status": "published",
+    "title": "Gli alberi del parco: facciamo l'erbario",
+    "slug": "gli-alberi-del-parco-erbario-2026",
+    "summary": "Attività per bambini dai 7 anni dedicata agli alberi del parco, con ritrovo presso la Biblioteca Comunale Vitaliano Modena.",
+    "start_date": "2026-10-24T10:00:00+02:00",
+    "end_date": "2026-10-24T12:00:00+02:00",
+    "all_day": false,
+    "location_name": "Biblioteca Comunale Vitaliano Modena",
+    "featured": false
+  },
+  {
+    "status": "published",
+    "title": "Inaugurazione Festa della Castagna e Torta Gigante",
+    "slug": "inaugurazione-festa-castagna-torta-gigante-2026",
+    "summary": "Apertura ufficiale della Festa della Castagna 2026 con il tradizionale taglio della Torta Gigante.",
+    "start_date": "2026-10-24T14:00:00+02:00",
+    "end_date": "2026-10-24T15:00:00+02:00",
+    "all_day": false,
+    "location_name": "Piazza Achille De Giovanni",
+    "featured": true
+  },
+  {
+    "status": "published",
+    "title": "Pentolina pentoletta pentolaccia",
+    "slug": "pentolina-pentoletta-pentolaccia-2026",
+    "summary": "Spettacolo di burattini per famiglie a cura di Luciano Gottardi. In caso di maltempo l'attività si sposta in teatro.",
+    "start_date": "2026-10-24T15:00:00+02:00",
+    "end_date": "2026-10-24T16:00:00+02:00",
+    "all_day": false,
+    "location_name": "Parco giochi di Piazza Montebello",
+    "featured": false
+  },
+  {
+    "status": "published",
+    "title": "Inaugurazione del forno di comunità",
+    "slug": "inaugurazione-forno-comunita-2026",
+    "summary": "Inaugurazione del forno di comunità nel parco giochi di Piazza Montebello.",
+    "start_date": "2026-10-24T16:30:00+02:00",
+    "end_date": "2026-10-24T17:30:00+02:00",
+    "all_day": false,
+    "location_name": "Piazza Montebello",
+    "featured": false
+  },
+  {
+    "status": "published",
+    "title": "The Capston – rock anni '70 e '80",
+    "slug": "the-capston-festa-castagna-2026",
+    "summary": "Concerto rock anni Settanta e Ottanta nella serata di sabato della Festa della Castagna.",
+    "start_date": "2026-10-24T20:30:00+02:00",
+    "end_date": "2026-10-24T22:30:00+02:00",
+    "all_day": false,
+    "location_name": "Piazzale dei pompieri",
+    "featured": false
+  },
+  {
+    "status": "published",
+    "title": "Passeggiata sul Sentiero del Castagno – domenica",
+    "slug": "passeggiata-sentiero-castagno-25-ottobre-2026",
+    "summary": "Secondo appuntamento con la passeggiata accompagnata sul Sentiero del Castagno, con prenotazione tramite APT Valsugana.",
+    "start_date": "2026-10-25T09:00:00+01:00",
+    "end_date": "2026-10-25T12:00:00+01:00",
+    "all_day": false,
+    "location_name": "Sentiero del Castagno",
+    "featured": true
+  },
+  {
+    "status": "published",
+    "title": "Musica con i Trifisa",
+    "slug": "trifisa-festa-castagna-2026",
+    "summary": "Musica dal vivo nel pomeriggio della domenica della Festa della Castagna.",
+    "start_date": "2026-10-25T13:00:00+01:00",
+    "end_date": "2026-10-25T15:00:00+01:00",
+    "all_day": false,
+    "location_name": "Piazzale dei pompieri",
+    "featured": false
+  }
+]
