@@ -1,0 +1,49 @@
+{
+  "content": {
+    "identifier": "RT-SOCIAL-2026-000001",
+    "slug": "illuminazione-parcheggio-grassi",
+    "title": "Completata l'illuminazione del parcheggio in località Grassi",
+    "summary": "Aggiornamento sui lavori conclusi al nuovo parcheggio.",
+    "briefing": "Comunicare il completamento dell'impianto di illuminazione pubblica del parcheggio.",
+    "content_type_key": "public_works",
+    "primary_category_key": "public_works",
+    "urgency": "timely",
+    "editorial_priority": 55,
+    "source_type": "manual",
+    "factual_notes": "Impianto ultimato. Lavori affidati alla ditta Battistel Marco di Marter. L'affidamento risale a maggio 2026.",
+    "ai_model": "gpt-5.6-sol"
+  },
+  "decisions": [
+    {
+      "channel_key": "instagram",
+      "decision": "publish",
+      "recommended_format": "POST",
+      "rationale": "Aggiornamento locale concreto e facilmente supportabile con una foto dell'opera.",
+      "confidence": 0.93,
+      "ai_model": "gpt-5.6-sol",
+      "draft": {
+        "format": "POST",
+        "headline": "Nuova illuminazione al parcheggio in località Grassi",
+        "body": "È stato completato l'impianto di illuminazione pubblica a servizio del nuovo parcheggio in località Grassi. Un ultimo intervento che completa l'opera e migliora la fruibilità dell'area per residenti e utenti.",
+        "call_to_action": null,
+        "alt_text": "Il nuovo parcheggio in località Grassi illuminato nelle ore serali.",
+        "visual_direction": "Foto reale dell'area, titolo breve sovrapposto, logo comunale discreto.",
+        "ai_model": "gpt-5.6-sol"
+      }
+    },
+    {
+      "channel_key": "facebook",
+      "decision": "publish",
+      "recommended_format": "FACEBOOK_POST",
+      "rationale": "Il contenuto ha anche valore informativo e può essere contestualizzato maggiormente.",
+      "confidence": 0.88,
+      "ai_model": "gpt-5.6-sol",
+      "draft": {
+        "format": "FACEBOOK_POST",
+        "headline": "Completato l'impianto di illuminazione del parcheggio in località Grassi",
+        "body": "È stato ultimato l'impianto di illuminazione pubblica a servizio del nuovo parcheggio in località Grassi. I lavori erano stati affidati nel mese di maggio alla ditta Battistel Marco di Marter. L'intervento completa l'opera a servizio dell'area, dei residenti e degli utenti di Casa Raphael.",
+        "ai_model": "gpt-5.6-sol"
+      }
+    }
+  ]
+}
