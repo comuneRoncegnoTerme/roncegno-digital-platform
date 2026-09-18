@@ -1,4 +1,4 @@
-.PHONY: dev-up dev-down staging-up staging-down staging-status staging-health staging-deploy prod-up prod-down prod-status prod-health backup migrate migrate-staging editorial-verify publication-refresh seed-content seed-content-dry-run
+.PHONY: dev-up dev-down staging-up staging-down staging-status staging-health staging-deploy prod-up prod-down prod-status prod-health backup migrate migrate-staging editorial-verify ai-editorial-verify ai-editorial-verify-staging publication-refresh seed-content seed-content-dry-run
 
 dev-up:
 	docker compose up -d
@@ -44,6 +44,12 @@ migrate-staging:
 
 editorial-verify:
 	sh ./scripts/verify-editorial-studio.sh
+
+ai-editorial-verify:
+	sh ./scripts/verify-ai-social-editorial.sh
+
+ai-editorial-verify-staging:
+	ENV_FILE=.env.staging COMPOSE_FILE=compose.staging.yaml COMPOSE_PROJECT_NAME=roncegno-staging sh ./scripts/verify-ai-social-editorial.sh
 
 publication-refresh:
 	sh ./scripts/refresh-publication-statuses.sh
