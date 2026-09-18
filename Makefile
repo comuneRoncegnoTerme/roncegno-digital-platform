@@ -1,4 +1,4 @@
-.PHONY: dev-up dev-down prod-up prod-down prod-status prod-health backup migrate editorial-verify publication-refresh seed-content seed-content-dry-run
+.PHONY: dev-up dev-down staging-up staging-down staging-status staging-health staging-deploy prod-up prod-down prod-status prod-health backup migrate migrate-staging editorial-verify publication-refresh seed-content seed-content-dry-run
 
 dev-up:
 	docker compose up -d
@@ -6,29 +6,47 @@ dev-up:
 dev-down:
 	docker compose down
 
+staging-up:
+	sh ./scripts/staging-up.sh
+
+staging-down:
+	sh ./scripts/staging-down.sh
+
+staging-status:
+	sh ./scripts/staging-status.sh
+
+staging-health:
+	sh ./scripts/staging-healthcheck.sh
+
+staging-deploy:
+	sh ./scripts/staging-deploy.sh
+
 prod-up:
-	./scripts/production-up.sh
+	sh ./scripts/production-up.sh
 
 prod-down:
-	./scripts/production-down.sh
+	sh ./scripts/production-down.sh
 
 prod-status:
-	./scripts/production-status.sh
+	sh ./scripts/production-status.sh
 
 prod-health:
-	./scripts/production-healthcheck.sh
+	sh ./scripts/production-healthcheck.sh
 
 backup:
-	./scripts/backup.sh
+	sh ./scripts/backup.sh
 
 migrate:
-	./scripts/migrate.sh
+	sh ./scripts/migrate.sh
+
+migrate-staging:
+	ENV_FILE=.env.staging COMPOSE_FILE=compose.staging.yaml COMPOSE_PROJECT_NAME=roncegno-staging sh ./scripts/migrate.sh
 
 editorial-verify:
-	./scripts/verify-editorial-studio.sh
+	sh ./scripts/verify-editorial-studio.sh
 
 publication-refresh:
-	./scripts/refresh-publication-statuses.sh
+	sh ./scripts/refresh-publication-statuses.sh
 
 seed-content:
 	python3 ./scripts/seed-content.py
