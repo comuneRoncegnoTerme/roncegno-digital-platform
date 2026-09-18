@@ -1,0 +1,35 @@
+name: Deploy staging
+
+on:
+  workflow_dispatch:
+
+concurrency:
+  group: staging
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: staging
+    steps:
+      - name: Configure SSH
+        env:
+          SSH_KEY: ${{ secrets.STAGING_SSH_KEY }}
+          HOST: ${{ secrets.STAGING_HOST }}
+        run: |
+          test -n "$SSH_KEY"
+          test -n "$HOST"
+          mkdir -p ~/.ssh
+          printf '%s\n' "$SSH_KEY" > ~/.ssh/staging_key
+          chmod 600 ~/.ssh/staging_key
+          ssh-keyscan -H "$HOST" >> ~/.ssh/known_hosts
+
+      - name: Deploy develop to staging
+        env:
+          HOST: ${{ secrets.STAGING_HOST }}
+          USER: ${{ secrets.STAGING_USER }}
+          PATH_ON_SERVER: ${{ secrets.STAGING_PATH }}
+        run: |
+          test -n "$USER"
+          test -n "$PATH_ON_SERVER"
+          ssh -i ~/.ssh/staging_key "$USER@$HOST" "cd '$PATH_ON_SERVER' && ./scripts/staging-deploy.sh"

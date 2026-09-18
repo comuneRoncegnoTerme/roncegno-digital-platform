@@ -1,0 +1,120 @@
+services:
+  database:
+    image: postgis/postgis:17-3.5-alpine
+    container_name: roncegno-hub-db-staging
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${DB_DATABASE}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - staging_database_data:/var/lib/postgresql/data
+      - ./infrastructure/postgres/init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_DATABASE}"]
+      interval: 10s
+      timeout: 5s
+      retries: 20
+    networks:
+      - internal
+
+  cache:
+    image: redis:7.4-alpine
+    container_name: roncegno-hub-cache-staging
+    restart: unless-stopped
+    command: ["redis-server", "--appendonly", "yes", "--requirepass", "${REDIS_PASSWORD}"]
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli -a '${REDIS_PASSWORD}' ping | grep PONG"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    volumes:
+      - staging_redis_data:/data
+    networks:
+      - internal
+
+  directus:
+    image: directus/directus:${DIRECTUS_VERSION:-11.14.0}
+    container_name: roncegno-content-hub-staging
+    restart: unless-stopped
+    depends_on:
+      database:
+        condition: service_healthy
+      cache:
+        condition: service_healthy
+    environment:
+      KEY: ${DIRECTUS_KEY}
+      SECRET: ${DIRECTUS_SECRET}
+      ADMIN_EMAIL: ${ADMIN_EMAIL}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD}
+      PUBLIC_URL: ${PUBLIC_URL}
+      DB_CLIENT: pg
+      DB_HOST: database
+      DB_PORT: 5432
+      DB_DATABASE: ${DB_DATABASE}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      WEBSOCKETS_ENABLED: "true"
+      CORS_ENABLED: "true"
+      CORS_ORIGIN: ${CORS_ORIGIN}
+      STORAGE_LOCATIONS: local
+      STORAGE_LOCAL_DRIVER: local
+      STORAGE_LOCAL_ROOT: /directus/uploads
+      CACHE_ENABLED: "true"
+      CACHE_AUTO_PURGE: "true"
+      CACHE_STORE: redis
+      REDIS: redis://:${REDIS_PASSWORD}@cache:6379
+      EXTENSIONS_AUTO_RELOAD: "false"
+      RATE_LIMITER_ENABLED: "true"
+      RATE_LIMITER_STORE: redis
+      RATE_LIMITER_POINTS: ${RATE_LIMITER_POINTS:-100}
+      RATE_LIMITER_DURATION: ${RATE_LIMITER_DURATION:-1}
+      LOG_LEVEL: ${LOG_LEVEL:-info}
+      TELEMETRY: "false"
+    volumes:
+      - staging_directus_uploads:/directus/uploads
+      - ./directus/extensions:/directus/extensions:ro
+      - ./directus/snapshots:/directus/snapshots
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:8055/server/health >/dev/null || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 30
+    networks:
+      - internal
+      - proxy
+
+  caddy:
+    image: caddy:2.10-alpine
+    container_name: roncegno-hub-proxy-staging
+    restart: unless-stopped
+    depends_on:
+      directus:
+        condition: service_healthy
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    environment:
+      HUB_DOMAIN: ${HUB_DOMAIN}
+      ACME_EMAIL: ${ACME_EMAIL}
+    volumes:
+      - ./infrastructure/caddy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - staging_caddy_data:/data
+      - staging_caddy_config:/config
+      - staging_caddy_logs:/var/log/caddy
+    networks:
+      - proxy
+
+networks:
+  internal:
+    internal: true
+  proxy:
+
+volumes:
+  staging_database_data:
+  staging_redis_data:
+  staging_directus_uploads:
+  staging_caddy_data:
+  staging_caddy_config:
+  staging_caddy_logs:

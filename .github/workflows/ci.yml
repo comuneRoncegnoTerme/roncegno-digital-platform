@@ -1,0 +1,41 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [develop, main]
+  push:
+    branches: [develop, main]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate shell scripts
+        run: |
+          find scripts -type f -name '*.sh' -print0 | xargs -0 -n1 sh -n
+
+      - name: Prepare validation environment
+        run: |
+          cp .env.staging.example .env.staging
+          sed -i 's/CHANGE_ME/ci-placeholder/g' .env.staging
+
+      - name: Validate staging compose
+        run: docker compose -p roncegno-staging -f compose.staging.yaml --env-file .env.staging config >/dev/null
+
+      - name: Validate production compose
+        env:
+          DB_DATABASE: ci
+          DB_USER: ci
+          DB_PASSWORD: ci
+          REDIS_PASSWORD: ci
+          DIRECTUS_KEY: ci-key
+          DIRECTUS_SECRET: ci-secret
+          ADMIN_EMAIL: ci@example.invalid
+          ADMIN_PASSWORD: ci
+          PUBLIC_URL: https://prod.example.invalid
+          CORS_ORIGIN: https://prod.example.invalid
+          HUB_DOMAIN: prod.example.invalid
+          ACME_EMAIL: ci@example.invalid
+        run: docker compose -f compose.production.yaml config >/dev/null

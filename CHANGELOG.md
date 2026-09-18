@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.3.1 — Staging & CI/CD
+
+- Introdotto branch `develop` come linea di integrazione per lo staging.
+- Aggiunto stack Docker staging isolato con PostgreSQL, Redis, Directus e Caddy dedicati.
+- Aggiunti script di avvio, stato, health check e deploy dello staging.
+- Reso il deploy di produzione esplicitamente vincolato al branch `main`.
+- Reso lo script migrazioni configurabile per file Compose e project name.
+- Aggiunta CI GitHub Actions per validare shell script e configurazioni Compose.
+- Aggiunto workflow manuale per il deploy remoto dello staging.
+- Documentato il flusso `feature/* -> develop -> staging -> main -> produzione`.
+
 ## 0.3.0 — Editorial Studio
 
 - Migrazione incrementale applicabile alla 0.2 senza reset del database.
