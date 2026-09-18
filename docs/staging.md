@@ -34,25 +34,26 @@ git clone <repository>
 cd roncegno-digital-platform
 git checkout develop
 cp .env.staging.example .env.staging
-./scripts/generate-secrets.sh
+sh ./scripts/generate-secrets.sh
 # copiare i segreti generati in .env.staging e impostare dominio/CORS
-./scripts/staging-up.sh
-./scripts/migrate.sh
-./scripts/staging-healthcheck.sh
+sh ./scripts/staging-up.sh
+make migrate-staging
+sh ./scripts/staging-healthcheck.sh
 ```
 
-Per le migrazioni usare:
+Le migrazioni staging possono essere eseguite anche esplicitamente:
 
 ```bash
-ENV_FILE=.env.staging COMPOSE_PROJECT_NAME=roncegno-staging ./scripts/migrate.sh
+ENV_FILE=.env.staging \
+COMPOSE_FILE=compose.staging.yaml \
+COMPOSE_PROJECT_NAME=roncegno-staging \
+sh ./scripts/migrate.sh
 ```
-
-Nota: lo script `migrate.sh` usa il servizio `database` del progetto Docker corrente. Per lo staging eseguire il comando dalla directory dello stack staging.
 
 ## Deploy
 
 ```bash
-./scripts/staging-deploy.sh
+sh ./scripts/staging-deploy.sh
 ```
 
 Lo script è volutamente vincolato al branch `develop`.
@@ -61,7 +62,7 @@ Lo script è volutamente vincolato al branch `develop`.
 
 Il workflow CI valida shell script e file Compose su PR e push verso `develop` e `main`.
 
-Il workflow di deploy staging è inizialmente manuale (`workflow_dispatch`). Configurare l'environment GitHub `staging` con:
+Il workflow di deploy staging è inizialmente manuale (`workflow_dispatch`). Configurare l'environment GitHub `staging` con i seguenti secret:
 
 - `STAGING_HOST`
 - `STAGING_USER`
@@ -70,8 +71,12 @@ Il workflow di deploy staging è inizialmente manuale (`workflow_dispatch`). Con
 
 Dopo il primo deploy riuscito, il trigger può essere esteso a ogni push su `develop`.
 
+Per la produzione creare un environment GitHub `production` con approvazione obbligatoria prima di introdurre un deploy automatico. Fino ad allora, il deploy produttivo resta manuale tramite `scripts/deploy.sh`.
+
 ## Produzione
 
-La produzione resta su `main`. Il deploy produttivo deve essere avviato solo dopo la verifica dello staging e con approvazione umana.
+La produzione resta su `main`. `scripts/deploy.sh` è vincolato a `main` e non accetta più un branch arbitrario.
+
+Attenzione: eventuali webhook, cron o servizi esterni già presenti sul VPS non sono definiti in questa repository. Prima di considerarli disattivati va verificata la configurazione del server di produzione.
 
 Non usare mai credenziali, database o volumi di produzione nello staging.
