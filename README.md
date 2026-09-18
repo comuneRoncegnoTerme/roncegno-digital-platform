@@ -1,17 +1,30 @@
-# Roncegno Digital Platform 0.3
+# Roncegno Digital Platform 0.4
 
 Content Hub multicanale basato su Directus, PostgreSQL/PostGIS e Redis.
 
-## Editorial Studio 0.3
+## AI Social Editorial 0.4
 
-Dopo l’avvio della piattaforma esistente, applica la migrazione senza cancellare i dati:
+La 0.4 introduce una redazione generale sopra il Content Hub:
+
+- contenuti editoriali indipendenti dal canale;
+- routing separato Instagram/Facebook;
+- bozze per canale in `distributions`;
+- metadati AI;
+- approvazione umana obbligatoria per le distribuzioni generate dall'AI;
+- calendario e coda editoriale.
+
+Migrazione:
 
 ```bash
 sh ./scripts/migrate.sh
-sh ./scripts/verify-editorial-studio.sh
+sh ./scripts/verify-ai-social-editorial.sh
 ```
 
-La release aggiunge workflow editoriale, revisioni, programmazione, sincronizzazione delle occorrenze e viste API per dashboard, calendario, eventi pubblici e “Roncegno oggi”. Consulta `docs/directus-editorial-studio.md`.
+Documentazione: `docs/ai-social-editorial.md` e `docs/ai-editorial-agent.md`.
+
+## Editorial Studio 0.3
+
+La release 0.3 ha introdotto workflow editoriale, revisioni, programmazione, sincronizzazione delle occorrenze e viste API per dashboard, calendario, eventi pubblici e “Roncegno oggi”.
 
 ## Ambienti
 
@@ -19,7 +32,7 @@ La release aggiunge workflow editoriale, revisioni, programmazione, sincronizzaz
 - **Staging:** `compose.staging.yaml`, branch `develop`
 - **Produzione:** `compose.production.yaml`, branch `main`
 
-Il flusso previsto è `feature/* -> develop -> staging -> verifica -> main -> produzione`.
+Flusso: `feature/* -> develop -> staging -> verifica -> main -> produzione`.
 
 ## Avvio locale
 
@@ -37,10 +50,10 @@ cp .env.staging.example .env.staging
 # compilare .env.staging con segreti e dominio dedicati
 sh ./scripts/staging-up.sh
 make migrate-staging
-sh ./scripts/staging-healthcheck.sh
+make ai-editorial-verify-staging
 ```
 
-Lo staging deve usare database, upload, Redis e credenziali separati. È consigliata una VPS/VM distinta dalla produzione. Consulta `docs/staging.md`.
+Lo staging deve usare database, upload, Redis e credenziali separati. Consulta `docs/staging.md`.
 
 ## Avvio produzione
 
@@ -54,13 +67,13 @@ sh ./scripts/production-healthcheck.sh
 
 ## Componenti
 
-- Directus 11, con versione bloccabile
+- Directus 11
 - PostgreSQL 17 + PostGIS 3.5
-- Redis per cache e rate limiter
-- Caddy per HTTPS e reverse proxy
-- backup e restore di database/upload
-- deploy controllato con health check
-- workflow GitHub Actions di validazione
+- Redis
+- Caddy
+- backup e restore
+- workflow GitHub Actions
+- modello editoriale multicanale con human approval
 
 ## Script principali
 
@@ -70,10 +83,10 @@ sh ./scripts/staging-up.sh
 sh ./scripts/staging-healthcheck.sh
 sh ./scripts/staging-deploy.sh
 sh ./scripts/production-up.sh
-sh ./scripts/production-status.sh
 sh ./scripts/production-healthcheck.sh
 sh ./scripts/backup.sh
 sh ./scripts/deploy.sh
+sh ./scripts/verify-ai-social-editorial.sh
 ```
 
 ## Documentazione
@@ -81,10 +94,11 @@ sh ./scripts/deploy.sh
 - `docs/architecture.md`
 - `docs/content-model.md`
 - `docs/directus-editorial-studio.md`
+- `docs/ai-social-editorial.md`
+- `docs/ai-editorial-agent.md`
 - `docs/staging.md`
 - `docs/production.md`
-- `docs/runbook.md`
 
 ## Sicurezza
 
-Non versionare `.env`, `.env.staging` o `.env.production`. Staging e produzione non devono condividere database, volumi o segreti.
+Non versionare `.env`, `.env.staging` o `.env.production`. Staging e produzione non devono condividere database, volumi o segreti. Le distribuzioni AI richiedono approvazione umana prima di poter diventare approvate, programmate o pubblicate.
