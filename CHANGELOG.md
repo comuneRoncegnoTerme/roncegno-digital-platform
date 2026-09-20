@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.4.0 — AI Social Editorial
+
+- Aggiunta collection `editorial_contents` per briefing e contenuti non limitati agli eventi.
+- Aggiunte relazioni per tassonomie e asset editoriali.
+- Aggiunta `editorial_channel_decisions` per routing Instagram/Facebook esplicito.
+- Aggiunti canali `instagram` e `facebook`.
+- Estesa `distributions` con copy, formato, visual direction, metadati AI, approvazione e performance.
+- Separati stato editoriale e stato tecnico di distribuzione.
+- Blocco database: una distribuzione generata dall'AI non può essere approvata/programmatica/pubblicata senza approvazione umana.
+- Aggiunte tassonomie editoriali istituzionali.
+- Aggiunte viste `hub_editorial_content_queue` e `hub_social_calendar`.
+- Estesa la dashboard editoriale.
+- Aggiunti script di verifica e istruzioni dell'AI Editorial Agent.
+
 ## 0.3.1 — Staging & CI/CD
 
 - Introdotto branch `develop` come linea di integrazione per lo staging.
@@ -22,7 +36,6 @@
 - Viste `hub_calendar`, `hub_upcoming_events`, `hub_today`, `hub_public_events` e `hub_editorial_dashboard`.
 - Script di migrazione, verifica e refresh pubblicazioni.
 - Guida completa alla configurazione del Data Studio Directus.
-- Matrice dei permessi e query API di esempio.
 
 ## 0.2.0 — Production Ready
 
