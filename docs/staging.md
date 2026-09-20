@@ -80,3 +80,9 @@ La produzione resta su `main`. `scripts/deploy.sh` è vincolato a `main` e non a
 Attenzione: eventuali webhook, cron o servizi esterni già presenti sul VPS non sono definiti in questa repository. Prima di considerarli disattivati va verificata la configurazione del server di produzione.
 
 Non usare mai credenziali, database o volumi di produzione nello staging.
+
+## Compatibilità ARM64 (Oracle Ampere A1)
+
+La VPS Oracle Always Free usa architettura `arm64`. L'immagine ufficiale `postgis/postgis:17-3.5-alpine` è attualmente pubblicata solo per `amd64`, quindi lo staging usa il rebuild multiarch `ghcr.io/cargosense/postgis:17-3.5-alpine`.
+
+La produzione resta sull'immagine ufficiale finché gira su host `amd64`. Prima di promuovere eventuali modifiche legate al database, verificare compatibilità di versione PostgreSQL/PostGIS tra staging e produzione.
