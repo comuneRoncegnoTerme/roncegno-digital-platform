@@ -1,6 +1,6 @@
 services:
   database:
-    image: postgis/postgis:17-3.5-alpine
+    image: ghcr.io/cargosense/postgis:17-3.5-alpine
     container_name: roncegno-hub-db-staging
     restart: unless-stopped
     environment:
